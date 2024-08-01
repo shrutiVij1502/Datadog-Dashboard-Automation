@@ -25,27 +25,41 @@ except Exception as e:
     print(f"Error initializing Git repository: {e}")
     exit(1)
 
+# Check the current branch
+current_branch = repo.active_branch.name
+print(f"Current branch: {current_branch}")
+
 # Check if there are previous commits
-commits = list(repo.iter_commits())
+commits = list(repo.iter_commits(current_branch, max_count=2))
+print(f"Number of commits: {len(commits)}")
+
 if len(commits) < 2:
-    print("Not enough commits to determine differences.")
-    exit(0)
+    print("Not enough commits to determine differences. Processing all clients.")
+    try:
+        with open(client_info_path, 'r') as f:
+            clients_info = json.load(f)
+        new_clients = [client["client_name"] for client in clients_info]
+    except Exception as e:
+        print(f"Error reading {client_info_path}: {e}")
+        exit(1)
+else:
+    # Get the diff of client-info.json from the previous commit
+    try:
+        diff_output = repo.git.diff('HEAD~1', client_info_path)
+        print("Diff Output:\n", diff_output)
+    except GitCommandError as e:
+        print(f"Error getting git diff for {client_info_path}: {e}")
+        exit(1)
 
-# Get the diff of client-info.json from the previous commit
-try:
-    diff_output = repo.git.diff('HEAD~1', client_info_path)
-except GitCommandError as e:
-    print(f"Error getting git diff for {client_info_path}: {e}")
-    exit(1)
-
-# Parse the diff to find added client names
-new_clients = []
-diff_lines = diff_output.split('\n')
-for line in diff_lines:
-    if line.startswith('+') and not line.startswith('+++'):
-        match = re.search(r'"client_name":\s*"([^"]+)"', line)
-        if match:
-            new_clients.append(match.group(1))
+    # Parse the diff to find added client names
+    new_clients = []
+    diff_lines = diff_output.split('\n')
+    for line in diff_lines:
+        if line.startswith('+') and not line.startswith('+++'):
+            match = re.search(r'"client_name":\s*"([^"]+)"', line)
+            if match:
+                new_clients.append(match.group(1))
+    print("New Clients:", new_clients)
 
 # Read current client configurations from client-info.json
 try:
