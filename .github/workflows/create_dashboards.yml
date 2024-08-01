@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: 'SHRUTI'  # Ensure this matches the branch or commit you want to check out
+          ref: 'shruti-2'
 
       - name: Set up Python
         uses: actions/setup-python@v2
