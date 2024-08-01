@@ -163,3 +163,4 @@ for client_info in current_clients_info:
             print(f"Dashboard created for {client_name}")
         except Exception as e:
             print(f"Error creating dashboard for {client_name}: {e}")
+            print(f"Dashboard created for {client_name}: {response}")
