@@ -39,8 +39,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
           git add processed_clients.json
           git commit -m "Update processed clients list"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.DATADOG_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

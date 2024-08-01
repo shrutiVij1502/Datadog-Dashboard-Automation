@@ -1,6 +1,11 @@
 [
     {
-      "client_name": "client-XYZ",
+      "client_name": "client-xyz",
+      "cpu_threshold": "",
+      "memory": ""
+    },
+    {
+      "client_name": "client2",
       "cpu_threshold": "",
       "memory": ""
     }
