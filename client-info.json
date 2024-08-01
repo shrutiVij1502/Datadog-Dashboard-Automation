@@ -20,7 +20,12 @@
         "memory": ""
     },
     {
-        "client_name": "client-test-456",
+        "client_name": "client-test-789",
+        "cpu_threshold": "",
+        "memory": ""
+    },
+    {
+        "client_name": "client-test-789",
         "cpu_threshold": "",
         "memory": ""
     }
