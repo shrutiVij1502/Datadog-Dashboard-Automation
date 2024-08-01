@@ -5,7 +5,6 @@ from datadog import initialize, api
 from git import Repo, GitCommandError
 
 # Initialize Datadog APIs
-#...
 options = {
     'api_key': os.getenv('DATADOG_API_KEY'),
     'app_key': os.getenv('DATADOG_APP_KEY'),
@@ -35,14 +34,8 @@ commits = list(repo.iter_commits(current_branch, max_count=2))
 print(f"Number of commits: {len(commits)}")
 
 if len(commits) < 2:
-    print("Not enough commits to determine differences. Processing all clients.")
-    try:
-        with open(client_info_path, 'r') as f:
-            clients_info = json.load(f)
-        new_clients = [client["client_name"] for client in clients_info]
-    except Exception as e:
-        print(f"Error reading {client_info_path}: {e}")
-        exit(1)
+    print("Not enough commits to determine differences. Exiting.")
+    exit(0)
 else:
     # Get the diff of client-info.json from the previous commit
     try:
@@ -61,6 +54,10 @@ else:
             if match:
                 new_clients.append(match.group(1))
     print("New Clients:", new_clients)
+
+    if not new_clients:
+        print("No new clients found. Exiting.")
+        exit(0)
 
 # Read current client configurations from client-info.json
 try:
