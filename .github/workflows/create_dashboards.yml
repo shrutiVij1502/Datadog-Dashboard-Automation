@@ -32,11 +32,11 @@ jobs:
         DATADOG_APP_KEY: ${{ secrets.DATADOG_APP_KEY }}
     
     - name: Commit and push changes
-        run: |
+      run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add state.json
           git commit -m "Update processed clients list"
           git push
-        env:
+      env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
