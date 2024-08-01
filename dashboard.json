@@ -1,5 +1,5 @@
 {
-    "title": "Github Workflow dashboard for {{client_name}}",
+    "title": "{{client_name}}",
     "description": "[[suggested_dashboards]]",
     "widgets": [
       {
