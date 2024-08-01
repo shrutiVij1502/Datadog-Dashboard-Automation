@@ -13,6 +13,11 @@
         "client_name": "client-test-xyz",
         "cpu_threshold": "",
         "memory": ""
-    }
+    },
+    {
+      "client_name": "client-test-pqr",
+      "cpu_threshold": "",
+      "memory": ""
+  }
 ]
   
