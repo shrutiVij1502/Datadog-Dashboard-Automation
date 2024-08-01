@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from datadog import initialize, api
 from git import Repo, GitCommandError
 
@@ -16,12 +17,34 @@ initialize(**options)
 # File paths
 client_info_path = 'client-info.json'
 dashboard_path = 'dashboard.json'
-state_file_path = 'state.json'
 
-# Read client configurations from client-info.json
+# Initialize the Git repository
+try:
+    repo = Repo('.')
+except Exception as e:
+    print(f"Error initializing Git repository: {e}")
+    exit(1)
+
+# Get the diff of client-info.json from the previous commit
+try:
+    diff_output = repo.git.diff('HEAD~1', client_info_path)
+except Exception as e:
+    print(f"Error getting git diff for {client_info_path}: {e}")
+    exit(1)
+
+# Parse the diff to find added client names
+new_clients = []
+diff_lines = diff_output.split('\n')
+for line in diff_lines:
+    if line.startswith('+') and not line.startswith('+++'):
+        match = re.search(r'"client_name":\s*"([^"]+)"', line)
+        if match:
+            new_clients.append(match.group(1))
+
+# Read current client configurations from client-info.json
 try:
     with open(client_info_path, 'r') as f:
-        clients_info = json.load(f)
+        current_clients_info = json.load(f)
 except Exception as e:
     print(f"Error reading {client_info_path}: {e}")
     exit(1)
@@ -34,59 +57,30 @@ except Exception as e:
     print(f"Error reading {dashboard_path}: {e}")
     exit(1)
 
-# Read the state file to get already processed clients
-if os.path.exists(state_file_path):
-    try:
-        with open(state_file_path, 'r') as f:
-            processed_clients = json.load(f)
-        # Ensure processed_clients is a list
-        if not isinstance(processed_clients, list):
-            raise ValueError("State file does not contain a list.")
-    except Exception as e:
-        print(f"Error reading {state_file_path}: {e}")
-        processed_clients = []
-
-else:
-    processed_clients = []
-
 # Create dashboards for each new client
-new_clients = [client for client in clients_info if client["client_name"] not in processed_clients]
-
-for client_info in new_clients:
+for client_info in current_clients_info:
     client_name = client_info["client_name"]
+    if client_name in new_clients:
+        # Convert the base dashboard config to a string
+        dashboard_config_str = json.dumps(base_dashboard_config)
 
-    # Convert the base dashboard config to a string
-    dashboard_config_str = json.dumps(base_dashboard_config)
+        # Replace the placeholder with the actual client name
+        dashboard_config_str = dashboard_config_str.replace("{{client_name}}", client_name)
 
-    # Replace the placeholder with the actual client name
-    dashboard_config_str = dashboard_config_str.replace("{{client_name}}", client_name)
-
-    # Convert the string back to a dictionary
-    dashboard_config = json.loads(dashboard_config_str)
-    
-    try:
-        # Create the dashboard
-        response = api.Dashboard.create(**dashboard_config)
-        print(f"Dashboard created for {client_name}: {response}")
-    except Exception as e:
-        print(f"Error creating dashboard for {client_name}: {e}")
-        continue
-
-    # Update the state file with the new client
-    processed_clients.append(client_name)
-
-# Write the updated processed clients list back to the state file
-try:
-    with open(state_file_path, 'w') as f:
-        json.dump(processed_clients, f)
-except Exception as e:
-    print(f"Error writing to {state_file_path}: {e}")
-    exit(1)
+        # Convert the string back to a dictionary
+        dashboard_config = json.loads(dashboard_config_str)
+        
+        try:
+            # Create the dashboard
+            response = api.Dashboard.create(**dashboard_config)
+            print(f"Dashboard created for {client_name}: {response}")
+        except Exception as e:
+            print(f"Error creating dashboard for {client_name}: {e}")
+            continue
 
 # Commit changes to the Git repository
 try:
-    repo = Repo('.')
-    repo.index.add([state_file_path])
+    repo.index.add([client_info_path])
     repo.index.commit('Update processed clients list')
     origin = repo.remote(name='origin')
 
