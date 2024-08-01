@@ -161,6 +161,7 @@ for client_info in current_clients_info:
         try:
             response = api.Dashboard.create(**dashboard_config)
             print(f"Dashboard created for {client_name}")
+            print(f"Dashboard created for {client_name}: {response}")
         except Exception as e:
             print(f"Error creating dashboard for {client_name}: {e}")
-            print(f"Dashboard created for {client_name}: {response}")
+            

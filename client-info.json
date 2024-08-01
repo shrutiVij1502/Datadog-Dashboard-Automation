@@ -13,6 +13,12 @@
         "client_name": "client-test-555",
         "cpu_threshold": "",
         "memory": ""
+    },
+    {
+        "client_name": "client-test-666",
+        "cpu_threshold": "",
+        "memory": ""
     }
+    
 ]
   
