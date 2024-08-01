@@ -61,13 +61,12 @@ with open(state_file, 'w') as f:
 # Commit changes to the Git repository
 repo = Repo('.')
 repo.index.add([state_file])
-repo.index.commit('Update state.json')
+repo.index.commit('Update processed clients list')
 origin = repo.remote(name='origin')
 
 # Set up credentials for pushing
 with repo.config_writer() as git_config:
     git_config.set_value('user', 'name', 'github-actions')
     git_config.set_value('user', 'email', 'github-actions@github.com')
-    git_config.set_value('http.https://github.com/.extraheader', 'Authorization: token {}'.format(os.getenv('PAT')))
 
 origin.push()
