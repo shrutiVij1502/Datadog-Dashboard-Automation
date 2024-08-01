@@ -27,13 +27,15 @@
 #     response = api.Dashboard.create(**dashboard_config)
 #     print(f"Dashboard created for {client_name}: {response}")
 
-from datadog import initialize, api
+import os
 import json
+import hashlib
+from datadog import initialize, api
 
-# Datadog API and application keys
 options = {
-    'api_key': 'YOUR_API_KEY',
-    'app_key': 'YOUR_APP_KEY'
+    'api_key': os.getenv('DATADOG_API_KEY'),
+    'app_key': os.getenv('DATADOG_APP_KEY'),
+    'api_host': 'https://api.us5.datadoghq.com'
 }
 
 initialize(**options)
