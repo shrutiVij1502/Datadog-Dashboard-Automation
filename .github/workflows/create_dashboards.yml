@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'client-info.json'
+      - 'dashboard.json'
+      - '.github/workflows/create_dashboards.yml'
 
 jobs:
   update-dashboards:
@@ -24,7 +26,7 @@ jobs:
         pip install datadog
     
     - name: Run dashboard script
-      run: python test.py
+      run: python create_dashboard.py
       env:
         DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
         DATADOG_APP_KEY: ${{ secrets.DATADOG_APP_KEY }}
