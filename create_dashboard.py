@@ -2,7 +2,7 @@ import os
 import json
 import re
 from datadog import initialize, api
-from git import Repo, GitCommandError
+from git import Repo
 
 # Initialize Datadog APIs
 options = {
@@ -78,21 +78,4 @@ for client_info in current_clients_info:
             print(f"Error creating dashboard for {client_name}: {e}")
             continue
 
-# Commit changes to the Git repository
-try:
-    repo.index.add([client_info_path])
-    repo.index.commit('Update processed clients list')
-    origin = repo.remote(name='origin')
-
-    # Set up credentials for pushing
-    with repo.config_writer() as git_config:
-        git_config.set_value('user', 'name', 'github-actions')
-        git_config.set_value('user', 'email', 'github-actions@github.com')
-
-    origin.push()
-except GitCommandError as e:
-    print(f"Git command error: {e}")
-    exit(1)
-except Exception as e:
-    print(f"General error: {e}")
-    exit(1)
+# No commit and push steps needed
