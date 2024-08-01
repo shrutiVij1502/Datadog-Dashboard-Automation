@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: 'SHRUTI'  
+          ref: 'SHRUTI'  # Ensure this matches the branch or commit you want to check out
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -39,10 +39,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
           git add processed_clients.json
           git commit -m "Update processed clients list"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # This is automatically provided by GitHub Actions

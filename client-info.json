@@ -1,11 +1,6 @@
 [
     {
-      "client_name": "client-ABC",
-      "cpu_threshold": "",
-      "memory": ""
-    },
-    {
-      "client_name": "client2",
+      "client_name": "client-def",
       "cpu_threshold": "",
       "memory": ""
     }
