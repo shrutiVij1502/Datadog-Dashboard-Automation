@@ -35,9 +35,9 @@ jobs:
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
-        git config --global http.https://github.com/.extraheader "Authorization: token ${{ secrets.PAT_TOKEN }}"
+        git config --global http.https://github.com/.extraheader "Authorization: token ${{ secrets.PAT }}"
         git add state.json
         git commit -m "Update state.json"
         git push
       env:
-        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        PAT: ${{ secrets.PAT }}
