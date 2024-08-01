@@ -18,6 +18,11 @@
       "client_name": "client-test-stu",
       "cpu_threshold": "",
       "memory": ""
-  }
+    },
+    {
+        "client_name": "client-test-vwx",
+        "cpu_threshold": "",
+        "memory": ""
+    }
 ]
   

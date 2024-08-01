@@ -3,7 +3,7 @@ import json
 from datadog import initialize, api
 from git import Repo, GitCommandError
 
-# Initialize Datadog API
+# Initialize Datadog APIs
 options = {
     'api_key': os.getenv('DATADOG_API_KEY'),
     'app_key': os.getenv('DATADOG_APP_KEY'),
@@ -35,7 +35,6 @@ except Exception as e:
     exit(1)
 
 # Read the state file to get already processed clients
-
 if os.path.exists(state_file_path):
     try:
         with open(state_file_path, 'r') as f:
