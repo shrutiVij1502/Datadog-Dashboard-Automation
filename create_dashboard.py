@@ -25,6 +25,10 @@ state_file = 'state.json'
 if os.path.exists(state_file):
     with open(state_file, 'r') as f:
         processed_clients = json.load(f)
+        # Ensure processed_clients is a list
+        if not isinstance(processed_clients, list):
+            print("Error: State file does not contain a list.")
+            processed_clients = []
 else:
     processed_clients = []
 
