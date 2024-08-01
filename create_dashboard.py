@@ -1,9 +1,9 @@
 import os
 import json
 from datadog import initialize, api
-from git import Repo  # GitPython to handle Git operations
+from git import Repo
 
-# Datadog API and application keys
+# Initialize Datadog API
 options = {
     'api_key': os.getenv('DATADOG_API_KEY'),
     'app_key': os.getenv('DATADOG_APP_KEY'),
@@ -37,20 +37,20 @@ new_clients = [client for client in clients_info if client["client_name"] not in
 
 for client_info in new_clients:
     client_name = client_info["client_name"]
-    
+
     # Convert the base dashboard config to a string
     dashboard_config_str = json.dumps(base_dashboard_config)
-    
+
     # Replace the placeholder with the actual client name
     dashboard_config_str = dashboard_config_str.replace("{{client_name}}", client_name)
-    
+
     # Convert the string back to a dictionary
     dashboard_config = json.loads(dashboard_config_str)
-    
+
     # Create the dashboard
     response = api.Dashboard.create(**dashboard_config)
     print(f"Dashboard created for {client_name}: {response}")
-    
+
     # Update the state file with the new client
     processed_clients.append(client_name)
 
@@ -61,12 +61,14 @@ with open(state_file, 'w') as f:
 # Commit changes to the Git repository
 repo = Repo('.')
 repo.index.add([state_file])
-repo.index.commit('Update processed clients list')
+repo.index.commit('Update state.json')
 origin = repo.remote(name='origin')
 
 # Set up credentials for pushing
 with repo.config_writer() as git_config:
     git_config.set_value('user', 'name', 'github-actions')
     git_config.set_value('user', 'email', 'github-actions@github.com')
+    git_config.set_value('http', 'https://github.com/.extraheader', f'Authorization: token {os.getenv("PAT")}')
 
 origin.push()
+ 
