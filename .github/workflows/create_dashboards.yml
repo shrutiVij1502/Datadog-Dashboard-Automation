@@ -37,10 +37,3 @@ jobs:
         run: |
           python create_dashboard.py
 
-      - name: Commit and push changes
-        run: |
-          git add state.json
-          git commit -m "Update processed clients list"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # This is automatically provided by GitHub Actions

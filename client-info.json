@@ -8,6 +8,11 @@
         "client_name": "client-test-def",
         "cpu_threshold": "",
         "memory": ""
+    },
+    {
+        "client_name": "client-test-xyz",
+        "cpu_threshold": "",
+        "memory": ""
     }
 ]
   
