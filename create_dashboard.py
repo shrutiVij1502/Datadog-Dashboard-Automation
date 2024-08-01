@@ -16,7 +16,7 @@ initialize(**options)
 # File paths
 client_info_path = 'client-info.json'
 dashboard_path = 'dashboard.json'
-state_file_path = 'processed_clients.json'
+state_file_path = 'state.json'
 
 # Read client configurations from client-info.json
 try:
