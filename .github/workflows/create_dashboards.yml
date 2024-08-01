@@ -40,4 +40,4 @@ jobs:
         git commit -m "Update state.json"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DATADOG_GITHUB_TOKEN : ${{ secrets.DATADOG_GITHUB_TOKEN  }}
