@@ -3,7 +3,7 @@ import json
 from datadog import initialize, api
 from git import Repo, GitCommandError
 
-# Datadog API and application keys
+# Initialize Datadog API
 options = {
     'api_key': os.getenv('DATADOG_API_KEY'),
     'app_key': os.getenv('DATADOG_APP_KEY'),
@@ -35,6 +35,7 @@ except Exception as e:
     exit(1)
 
 # Read the state file to get already processed clients
+
 if os.path.exists(state_file_path):
     try:
         with open(state_file_path, 'r') as f:
@@ -45,6 +46,7 @@ if os.path.exists(state_file_path):
     except Exception as e:
         print(f"Error reading {state_file_path}: {e}")
         processed_clients = []
+
 else:
     processed_clients = []
 
@@ -53,13 +55,13 @@ new_clients = [client for client in clients_info if client["client_name"] not in
 
 for client_info in new_clients:
     client_name = client_info["client_name"]
-    
+
     # Convert the base dashboard config to a string
     dashboard_config_str = json.dumps(base_dashboard_config)
-    
+
     # Replace the placeholder with the actual client name
     dashboard_config_str = dashboard_config_str.replace("{{client_name}}", client_name)
-    
+
     # Convert the string back to a dictionary
     dashboard_config = json.loads(dashboard_config_str)
     
@@ -70,7 +72,7 @@ for client_info in new_clients:
     except Exception as e:
         print(f"Error creating dashboard for {client_name}: {e}")
         continue
-    
+
     # Update the state file with the new client
     processed_clients.append(client_name)
 

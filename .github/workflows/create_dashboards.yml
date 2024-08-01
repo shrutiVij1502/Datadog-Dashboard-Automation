@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'client-info.json'
+      - 'dashboard.json'
+      - '.github/workflows/create_dashboards.yml'
 
 jobs:
   update-dashboards:
@@ -36,4 +38,3 @@ jobs:
           DATADOG_APP_KEY: ${{ secrets.DATADOG_APP_KEY }}
         run: |
           python create_dashboard.py
-
