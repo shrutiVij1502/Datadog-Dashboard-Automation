@@ -35,6 +35,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
+        git config --global http.https://github.com/.extraheader "Authorization: token ${{ secrets.DATADOG_GITHUB_TOKEN }}"
         git add state.json
         git commit -m "Update state.json"
         git push
