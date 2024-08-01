@@ -2,7 +2,7 @@ import os
 import json
 import re
 from datadog import initialize, api
-from git import Repo
+from git import Repo, GitCommandError
 
 # Initialize Datadog APIs
 options = {
@@ -25,10 +25,16 @@ except Exception as e:
     print(f"Error initializing Git repository: {e}")
     exit(1)
 
+# Check if there are previous commits
+commits = list(repo.iter_commits())
+if len(commits) < 2:
+    print("Not enough commits to determine differences.")
+    exit(0)
+
 # Get the diff of client-info.json from the previous commit
 try:
     diff_output = repo.git.diff('HEAD~1', client_info_path)
-except Exception as e:
+except GitCommandError as e:
     print(f"Error getting git diff for {client_info_path}: {e}")
     exit(1)
 
@@ -77,5 +83,3 @@ for client_info in current_clients_info:
         except Exception as e:
             print(f"Error creating dashboard for {client_name}: {e}")
             continue
-
-# No commit and push steps needed

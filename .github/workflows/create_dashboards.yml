@@ -6,6 +6,7 @@ on:
       - 'client-info.json'
       - 'dashboard.json'
       - '.github/workflows/create_dashboards.yml'
+      - 'create_dashboard.py'
 
 jobs:
   update-dashboards:
