@@ -27,7 +27,7 @@ def load_client_data():
 
 # Load dashboard template
 def load_dashboard_template():
-    with open('dashboard_template.json', 'r') as file:
+    with open('dashboard.json', 'r') as file:
         return json.load(file)
 
 # Create or update dashboard
