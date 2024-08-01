@@ -8,21 +8,6 @@
       "client_name": "client2",
       "cpu_threshold": "",
       "memory": ""
-    },
-    {
-      "client_name": "client3",
-      "cpu_threshold": "",
-      "memory": ""
-    },
-    {
-        "client_name": "client4",
-        "cpu_threshold": "",
-        "memory": ""
-    },
-    {
-        "client_name": "client5",
-        "cpu_threshold": "",
-        "memory": ""
     }
   ]
   
